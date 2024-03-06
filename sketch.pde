@@ -1,33 +1,17 @@
-/**
-  @author: KduckGames
-*/
-
-/*TODO:
-*change way to controll raquette (only one at a time for now)
-*change score font
-*review size raquette
-*add menu (change mode & settings)
-*/
-
-
 int xb,yb,rb;
 int dirx, diry;
 int x1,y1,x2,y2,w,h;
 
 int score1,score2,hiscore = 0;
 
-boolean basp1pressed = false ,hautp1pressed = false,hautp2pressed = false,basp2pressed = false;
-
-PFont font;
-
 int mode = 1;
 
 void setup() {
-  orientation(LANDSCAPE);
+  //orientation(LANDSCAPE);
   //size(800,500);
   //fullScreen();
   //noCursor();
-  rb = height/100;
+  rb = height/50;
   dirx = -width/400;
   w = width/200;
   h = int(height/12.5);
@@ -49,7 +33,7 @@ void draw() {
   text(score1,width/3,height/10);
 
   
-  xb+=dirx;
+  xb+= dirx;
   yb+= diry;
 
   switch(mode) {
@@ -62,64 +46,6 @@ void draw() {
   }
   
 }
-
-/*void keyPressed() {
-  switch(key) {
-    case 'w': //bas p1
-    basp1pressed = true;
-    break;
-    case 's': //haut p1
-    hautp1pressed = true;
-    break;
-    case 'n': //bas p2
-    hautp2pressed = true;
-    break;
-    case 'j': //haut p2
-    basp2pressed = true;
-    break;
-  }
-}*/
-
-void touchStarted() {
-  if(mouseY<=height/2) {//haut ecran
-    if(mouseX<=width/2) { //gauche ecran
-      hautp1pressed = true;
-    } else hautp2pressed = true;
-  } else {//bas ecran
-    if(mouseX<=width/2) { //gauche ecran
-      basp1pressed = true;
-    } else basp2pressed = true;
-  }
-}
-
-void touchEnded() {
-  if(mouseY<=height/2) {//haut ecran
-    if(mouseX<=width/2) { //gauche ecran
-      hautp1pressed = false;
-    } else hautp2pressed = false;
-  } else {//bas ecran
-    if(mouseX<=width/2) { //gauche ecran
-      basp1pressed = false;
-    } else basp2pressed = false;
-  }
-}
-
-/*void keyReleased() {
-  switch(key) {
-    case 'w': //bas p1
-    basp1pressed = false;
-    break;
-    case 's': //haut p1
-    hautp1pressed = false;
-    break;
-    case 'n': //bas p2
-    basp2pressed = false;
-    break;
-    case 'j': //haut p2
-    hautp2pressed = false;
-    break;
-  }
-}*/
 
 void touched(int y) {
   dirx = -dirx;
@@ -165,24 +91,20 @@ void mode1() {
     start();
   }
   
-  if (basp1pressed) {
-    if(y1+h<height) y1+=5;
-  }
-  
-  if (hautp1pressed) {
-    if(y1-h>0) y1-=5;
-  }
-  
-  if (basp2pressed) {
-    if(y2+h<height) y2+=5;
-  }
-  
-  if (hautp2pressed) {
-    if(y2-h>0) y2-=5;
+  for(TouchEvent.Pointer te: touches) {
+    if(te.y<=height/2) {//haut ecran
+      if(te.x<=width/2) { //gauche ecran
+        if(y1-h>0) y1-=5;
+      } else if(y2-h>0) y2-=5;
+    } else {//bas ecran
+      if(te.x<=width/2) { //gauche ecran
+        if(y1+h<height) y1+=5;
+      } else if(y2+h<height) y2+=5;
+    }
   }
 }
 
-void mode2() {
+void mode2() { // to implement
   text("hi score: " + hiscore,width/3*2,height/10);
   
   if(yb+rb > height || yb-rb < 0) {
@@ -204,11 +126,16 @@ void mode2() {
     score1 = 0;
   }
   
-  if (basp1pressed) {
-    if(y1+h<height) y1+=5;
+  for(TouchEvent.Pointer te: touches) {
+    if(te.y<=height/2) {//haut ecran
+      if(te.x<=width/2) { //gauche ecran
+        if(y1-h>0) y1-=5;
+      }
+    } else {//bas ecran
+      if(te.x<=width/2) { //gauche ecran
+        if(y1+h<height) y1+=5;
+      }
+    }
   }
   
-  if (hautp1pressed) {
-    if(y1-h>0) y1-=5;
-  }
 }
